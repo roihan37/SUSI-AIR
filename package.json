@@ -1,0 +1,32 @@
+{
+  "name": "roihan",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@iconify-vue/glyphs": "^1.0.2",
+    "@iconify-vue/ion": "^1.0.4",
+    "@iconify-vue/lucide": "^1.0.50",
+    "@iconify-vue/material-symbols": "^1.0.46",
+    "@iconify-vue/noto-v1": "^1.0.3",
+    "@iconify-vue/selfhst": "^1.0.6",
+    "@iconify-vue/uil": "^1.0.3",
+    "@nuxt/ui": "^4.9.0",
+    "@popperjs/core": "^2.11.8",
+    "echarts": "^6.1.0",
+    "nuxt": "^4.4.8",
+    "tailwindcss": "^4.3.2",
+    "v-calendar": "^3.1.2",
+    "valibot": "^1.4.2",
+    "vue": "^3.5.39",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^5.1.0",
+    "zod": "^4.4.3"
+  }
+}
