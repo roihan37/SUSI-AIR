@@ -82,7 +82,7 @@ defineProps<{
 
             <div class="flex items-center gap-2">
 
-                <ScheduleIcon height="20px"/>
+                <UIcon name="i-lucide-calendar-days" class="size-5" />
 
                 <p class="font-bold">
 
@@ -94,7 +94,7 @@ defineProps<{
 
             <div class="flex items-center gap-2">
 
-                <ScheduleOutlineIcon height="20px"/>
+                <UIcon name="i-material-symbols-timer-outline" class="size-5" />
 
                 <p class="font-bold">
 

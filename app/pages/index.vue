@@ -45,23 +45,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <div class="relative">
 
       <!-- Desktop -->
-      <NuxtImg
-        src="/images/auth/loginImage.png"
-        class="hidden lg:block absolute inset-0 h-full w-full object-cover"
-      />
+      <NuxtImg src="/images/auth/loginImage.png" class="hidden lg:block absolute inset-0 h-full w-full object-cover" />
 
       <!-- Mobile -->
-      <NuxtImg
-        src="/images/auth/loginImage.png"
-        class="lg:hidden h-64 w-full object-cover"
-      />
+      <NuxtImg src="/images/auth/loginImage.png" class="lg:hidden h-64 w-full object-cover" />
 
       <div class="absolute inset-0 bg-slate-900/35"></div>
 
-      <div
-        class="absolute bottom-10 left-10 hidden lg:block text-white max-w-md"
-      >
-        
+      <div class="absolute bottom-10 left-10 hidden lg:block text-white max-w-md">
+
 
         <h1 class="text-4xl font-bold leading-tight">
           Pilot Logbook & Schedule Companion
@@ -75,11 +67,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </div>
 
     <!-- Login -->
-    <div
-      class="flex items-center justify-center bg-white px-6 pb-5 -mt-10 lg:mt-0 lg:px-20 lg:py-10 relative rounded-2xl
+    <div class="flex items-center justify-center bg-white px-6 pb-5 -mt-10 lg:mt-0 lg:px-20 lg:py-10 relative rounded-2xl
     z-20
-"
-    >
+">
 
       <div class="w-full max-w-md">
 
@@ -100,12 +90,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
         </div>
 
-        <NuxtNuxtImg
-          src="/images/logo.png"
-          class="mx-auto h-24 mb-8"
-        />
+        <NuxtNuxtImg src="/images/logo.png" class="mx-auto h-24 mb-8" />
 
-        <h2 class="text-3xl font-bold">
+        <h2 class="text-3xl font-bold mt-10 xl:mt-0">
           Welcome Back
         </h2>
 
@@ -113,88 +100,46 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           Sign in to continue your flight activities.
         </p>
 
-        <UForm
-          :schema="schema"
-          :state="state"
-          class="mt-8 space-y-5"
-          @submit="onSubmit"
-        >
+        <UForm :schema="schema" :state="state" class="mt-8 space-y-5" @submit="onSubmit">
 
-          <UFormField
-            label="Username"
-            name="email"
-          >
+          <UFormField label="Username" name="email">
 
-            <UInput
-              v-model="state.email"
-              class="w-full"
-              size="xl"
-              icon="i-lucide-user"
-              placeholder="Enter your username"
-            />
+            <UInput v-model="state.email" class="w-full" size="xl" icon="i-lucide-user"
+              placeholder="Enter your username" />
 
           </UFormField>
 
-          <UFormField
-            label="Password"
-            name="password"
-          >
+          <UFormField label="Password" name="password">
 
-            <UInput
-              v-model="state.password"
-              type="password"
-              class="w-full"
-              size="xl"
-              icon="i-lucide-lock"
-              placeholder="Enter your password"
-            />
+            <UInput v-model="state.password" type="password" class="w-full" size="xl" icon="i-lucide-lock"
+              placeholder="Enter your password" />
 
           </UFormField>
 
           <div class="flex items-center justify-between">
 
-            <UCheckbox
-              v-model="state.remember"
-              label="Remember me"
-            />
+            <UCheckbox v-model="state.remember" label="Remember me" />
 
-            <button
-              type="button"
-              class="text-sm text-red-500 hover:underline"
-            >
+            <button type="button" class="text-sm text-red-500 hover:underline">
               Forgot Password?
             </button>
 
           </div>
 
-          <UButton
-            type="submit"
-            color="error"
-            size="xl"
-            block
-            class="h-12"
-          >
+          <UButton type="submit" color="error" size="xl" block class="h-12">
             Sign In
           </UButton>
 
           <USeparator label="OR" />
 
-          <UButton
-            variant="outline"
-            size="xl"
-            block
-            class="h-12"
-            @click="navigateTo('/dashboard')"
-          >
+          <UButton variant="outline" size="xl" block class="h-12" @click="navigateTo('/dashboard')">
             Continue as Guest
           </UButton>
 
         </UForm>
 
         <!-- Mobile Help -->
-        <div
-          class="mt-8 flex items-center justify-center gap-2 lg:hidden"
-        >
+        <div class="mt-8 flex items-center justify-center gap-2 lg:hidden">
 
           <HeadsetIcon class="w-4 h-4" />
 
