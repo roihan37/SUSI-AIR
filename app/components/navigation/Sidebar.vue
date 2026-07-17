@@ -2,9 +2,7 @@
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 
 const open = useState('sidebar-open', () => true)
-
-const colorMode = useColorMode()
-
+const {pilot} = useFlightHoursStore()
 const teams = ref([
   {
     label: 'Nuxt',
@@ -51,45 +49,26 @@ const teamsItems = computed<DropdownMenuItem[][]>(() => {
 function getItems(state: 'collapsed' | 'expanded') {
   return [
     {
-      label: 'Inbox',
-      icon: 'i-lucide-inbox',
-      badge: '4'
+      label: 'Dashboard',
+      icon: 'i-lucide-house',
+      to: '/dashboard'
     },
     {
-      label: 'Issues',
-      icon: 'i-lucide-square-dot'
+      label: 'Schedule',
+      icon: 'i-lucide-calendar-days',
+      to: '/schedule'
     },
     {
-      label: 'Activity',
-      icon: 'i-lucide-square-activity'
+      label: 'Logbook',
+      icon: 'i-lucide-book-open',
+      to: '/logbook'
     },
-    {
-      label: 'Settings',
-      icon: 'i-lucide-settings',
-      defaultOpen: true,
-      children:
-        state === 'expanded'
-          ? [
-              {
-                label: 'General',
-                icon: 'i-lucide-house'
-              },
-              {
-                label: 'Team',
-                icon: 'i-lucide-users'
-              },
-              {
-                label: 'Billing',
-                icon: 'i-lucide-credit-card'
-              }
-            ]
-          : []
-    }
+    
   ] satisfies NavigationMenuItem[]
 }
 
 const user = ref({
-  name: 'Benjamin Canac',
+  name: `Captain${pilot.name}`,
   avatar: {
     src: 'https://github.com/benjamincanac.png',
     alt: 'Benjamin Canac'
@@ -98,66 +77,11 @@ const user = ref({
 
 const userItems = computed<DropdownMenuItem[][]>(() => [
   [
-    {
-      label: 'Profile',
-      icon: 'i-lucide-user'
-    },
-    {
-      label: 'Billing',
-      icon: 'i-lucide-credit-card'
-    },
-    {
-      label: 'Settings',
-      icon: 'i-lucide-settings',
-      to: '/settings'
-    }
-  ],
-  [
-    {
-      label: 'Appearance',
-      icon: 'i-lucide-sun-moon',
-      children: [
-        {
-          label: 'Light',
-          icon: 'i-lucide-sun',
-          type: 'checkbox',
-          checked: colorMode.value === 'light',
-          onUpdateChecked(checked: boolean) {
-            if (checked) {
-              colorMode.preference = 'light'
-            }
-          },
-          onSelect(e: Event) {
-            e.preventDefault()
-          }
-        },
-        {
-          label: 'Dark',
-          icon: 'i-lucide-moon',
-          type: 'checkbox',
-          checked: colorMode.value === 'dark',
-          onUpdateChecked(checked: boolean) {
-            if (checked) {
-              colorMode.preference = 'dark'
-            }
-          },
-          onSelect(e: Event) {
-            e.preventDefault()
-          }
-        }
-      ]
-    }
-  ],
-  [
-    {
-      label: 'GitHub',
-      icon: 'i-simple-icons-github',
-      to: 'https://github.com/nuxt/ui',
-      target: '_blank'
-    },
+    
     {
       label: 'Log out',
-      icon: 'i-lucide-log-out'
+      icon: 'i-lucide-log-out',
+      to : '/'
     }
   ]
 ])
@@ -166,7 +90,7 @@ defineShortcuts(extractShortcuts(teamsItems.value))
 </script>
 
 <template>
-  <div class="hidden md:flex flex-1">
+  <div class="hidden md:flex h-screen">
     <USidebar
       v-model:open="open"
       collapsible="icon"
@@ -177,32 +101,18 @@ defineShortcuts(extractShortcuts(teamsItems.value))
         body: 'py-0'
       }"
     >
-      <template #header>
-        <UDropdownMenu
-          :items="teamsItems"
-          :content="{ align: 'start', collisionPadding: 12 }"
-          :ui="{ content: 'w-(--reka-dropdown-menu-trigger-width) min-w-48' }"
-        >
-          <UButton
-            v-bind="selectedTeam"
-            trailing-icon="i-lucide-chevrons-up-down"
-            color="neutral"
-            variant="ghost"
-            square
-            class="w-full data-[state=open]:bg-elevated overflow-hidden"
-            :ui="{
-              trailingIcon: 'text-dimmed ms-auto'
-            }"
-          />
-        </UDropdownMenu>
-      </template>
+     
 
       <template #default="{ state }">
         <UNavigationMenu
+          class="mt-8"
           :key="state"
           :items="getItems(state)"
           orientation="vertical"
-          :ui="{ link: 'p-1.5 overflow-hidden' }"
+          :ui="{
+            list: 'space-y-3',
+            link: ' text-10  shrink-0'
+ }"
         />
       </template>
 
@@ -219,7 +129,7 @@ defineShortcuts(extractShortcuts(teamsItems.value))
             color="neutral"
             variant="ghost"
             square
-            class="w-full data-[state=open]:bg-elevated overflow-hidden"
+            class="w-full data-[state=open]:bg-elevated overflow-hidden "
             :ui="{
               trailingIcon: 'text-dimmed ms-auto'
             }"

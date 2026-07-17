@@ -1,16 +1,13 @@
 <template>
-
-<div class="flex flex-1 bg-gray-50">
+  <div class="flex min-h-screen bg-gray-50">
 
     <NavigationSidebar />
 
-    <main >
+    <main class="flex-1 overflow-y-auto p-6 pb-30 lg:pb-6">
       <slot />
     </main>
 
-
     <NavigationBottomNav />
 
-</div>
-
+  </div>
 </template>

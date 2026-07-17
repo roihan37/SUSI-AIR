@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Susi Air Expands Pioneer Flight Network",
+    "category": "Company",
+    "date": "2026-05-31",
+    "image": "/images/news/news-1.png"
+  },
+  {
+    "id": 2,
+    "title": "Flight Safety Procedures Updated for All Pilots",
+    "category": "Safety",
+    "date": "2026-05-30",
+    "image": "/images/news/news-2.png"
+  },
+  {
+    "id": 3,
+    "title": "Weather Advisory Issued for Eastern Indonesia",
+    "category": "Operations",
+    "date": "2026-05-29",
+    "image": "/images/news/news-3.png"
+  },
+  {
+    "id": 4,
+    "title": "New Caravan Aircraft Joins Susi Air Fleet",
+    "category": "Fleet",
+    "date": "2026-05-27",
+    "image": "/images/news/news-4.png"
+  }
+]

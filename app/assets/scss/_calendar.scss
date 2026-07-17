@@ -1,0 +1,338 @@
+@use "variables" as *;
+/* ===============================
+   Calendar Container
+================================= */
+
+:deep(.vc-container) {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 24px;
+
+    background: white;
+
+}
+
+/* ===============================
+   Header
+================================= */
+
+
+
+:deep(.vc-title) {
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #1E293B;
+
+}
+
+:deep(.vc-arrow) {
+
+    color: #64748B;
+
+    transition: .2s;
+
+}
+
+:deep(.vc-arrow:hover) {
+
+    color: #0F172A;
+
+    transform: scale(1.15);
+
+}
+
+/* ===============================
+   Weekday
+================================= */
+
+:deep(.vc-weekday) {
+
+    color: #64748B;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    padding-bottom: 12px;
+
+}
+
+/* ===============================
+   Day Cell
+================================= */
+
+:deep(.vc-day) {
+
+    height: 72px;
+
+    min-height: 72px;
+
+    max-height: 72px;
+
+    padding: 2px;
+
+}
+
+@media (max-width:640px) {
+
+    :deep(.vc-day) {
+
+        height: 64px;
+
+        min-height: 64px;
+
+        max-height: 64px;
+
+    }
+
+}
+
+@media (min-width:768px) {
+
+    :deep(.vc-day) {
+
+        height: 84px;
+
+        min-height: 84px;
+
+        max-height: 84px;
+
+    }
+
+}
+
+:deep(.vc-day-content) {
+
+    display: flex;
+
+    width: 100%;
+
+    height: 100%;
+
+    align-items: stretch;
+
+    justify-content: stretch;
+
+}
+
+/* Hover */
+
+:deep(.vc-day-content:hover) {
+
+    transform: scale(1.05);
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+
+}
+
+/* ===============================
+   Highlight
+================================= */
+
+:deep(.vc-highlight) {
+
+    border-radius: 18px !important;
+
+}
+
+/* Today */
+
+:deep(.vc-highlight-content-solid) {
+
+    color: white;
+
+    font-weight: 700;
+
+}
+
+/* ===============================
+   Popover
+================================= */
+
+:deep(.vc-popover-content) {
+
+    border-radius: 18px;
+
+    padding: 14px;
+
+    border: none;
+
+    box-shadow:
+
+        0 12px 30px rgba(0, 0, 0, .12);
+
+}
+
+/* ===============================
+   Outside Month
+================================= */
+
+:deep(.vc-day.is-not-in-month) {
+
+    opacity: .35;
+
+}
+
+/* ===============================
+   Focus
+================================= */
+
+:deep(.vc-day-content:focus) {
+
+    outline: none;
+
+}
+
+/* ===============================
+   Transition
+================================= */
+
+:deep(.vc-day-layer) {
+
+    transition: .25s;
+
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:640px) {
+
+    :deep(.vc-day) {
+
+        min-height: 64px;
+
+    }
+
+    :deep(.vc-weekday) {
+
+        font-size: 12px;
+
+    }
+
+    :deep(.vc-title) {
+
+        font-size: 22px;
+
+    }
+
+}
+
+/* ==========================================
+   Desktop
+========================================== */
+
+@media (min-width:768px) {
+
+    :deep(.vc-day) {
+
+        min-height: 82px;
+
+    }
+
+}
+
+/* ==========================================
+   Today
+========================================== */
+
+:deep(.vc-day.is-today .vc-highlight) {
+
+    outline: 3px solid #2563EB;
+
+    outline-offset: 2px;
+
+}
+
+/* ==========================================
+   Hover
+========================================== */
+
+:deep(.vc-day-content) {
+
+    transition:
+        transform .2s,
+        box-shadow .2s,
+        filter .2s;
+
+}
+
+:deep(.vc-day-content:hover) {
+
+    transform: translateY(-2px);
+
+    filter: brightness(.97);
+
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, .12);
+
+}
+
+/* ==========================================
+   Badge
+========================================== */
+
+.badge {
+
+    transition: .2s;
+
+}
+
+:deep(.vc-day-content:hover) .badge {
+
+    transform: scale(1.12);
+
+}
+
+/* ==========================================
+   Check
+========================================== */
+
+.check {
+
+    transition: .2s;
+
+}
+
+:deep(.vc-day-content:hover) .check {
+
+    transform: rotate(-8deg);
+
+}
+
+/* ==========================================
+   Popover
+========================================== */
+
+:deep(.vc-popover-content) {
+
+    animation: fadeIn .18s ease;
+
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(8px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}

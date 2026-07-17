@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { use } from 'echarts/core'
-import { CanvasRenderer } from 'echarts/renderers'
-import { LineChart } from 'echarts/charts'
+import { computed } from "vue"
+import { use } from "echarts/core"
+import { CanvasRenderer } from "echarts/renderers"
+import { LineChart } from "echarts/charts"
 
 import {
   GridComponent,
   TooltipComponent,
   TitleComponent,
-  MarkLineComponent
-} from 'echarts/components'
+  MarkLineComponent,
+  LegendComponent
+} from "echarts/components"
 
-import VChart from 'vue-echarts'
+import VChart from "vue-echarts"
+import { useFlightHoursStore } from "~/stores/flightStore"
 
 use([
   CanvasRenderer,
@@ -19,304 +21,208 @@ use([
   GridComponent,
   TooltipComponent,
   TitleComponent,
-  MarkLineComponent
+  MarkLineComponent,
+  LegendComponent
 ])
 
-const selectedRange = ref<'1w' | '1m' | '3m' | '6m' | '1y'>('1w')
+const store = useFlightHoursStore()
 
-const ranges = ['1w', '1m', '3m', '6m', '1y'] as const
+const ranges = ["1w", "1m", "3m", "6m", "1y"] as const
 
-const chartConfig = {
-  '1w': {
-    labels: [
-      '24 May','25 May','26 May','27 May','28 May',
-      '29 May','30 May','31 May',
-      '01 Jun','02 Jun','03 Jun','04 Jun','05 Jun','06 Jun','07 Jun'
-    ],
+const currentConfig = computed(() => {
+  return store.chartBounds[store.selectedRange]
+})
 
-    data: [0,8,12,12,13,26,35,27,17,26,25,24,17,25,34],
+const chartData = computed(() => {
+  const config = currentConfig.value
+  const today = new Date(store.today)
 
-    max: 45,
+  return Array.from({ length: 15 }, (_, i) => {
+    const current = new Date(today)
 
-    limit: 40,
+    current.setDate(today.getDate() - 7 + i)
 
-    highlight: '31 May'
-  },
+    const start = new Date(current)
 
-  '1m': {
-    labels: ['Week 1','Week 2','Week 3','Week 4'],
+    start.setDate(current.getDate() - config.windowDays + 1)
 
-    data: [22,30,18,35],
+    const total = store.flightHours
+      .filter((item) => {
+        const d = new Date(item.date)
 
-    max: 40,
+        return d >= start && d <= current
+      })
+      .reduce((sum, item) => sum + item.hours, 0)
 
-    limit: 35,
+    return Number(total.toFixed(1))
+  })
+})
 
-    highlight: 'Week 2'
-  },
+const xAxisData = computed(() => {
+  const today = new Date(store.today)
 
-  '3m': {
-    labels: ['Jan','Feb','Mar'],
+  return Array.from({ length: 15 }, (_, i) => {
+    const date = new Date(today)
 
-    data: [120,150,170],
+    date.setDate(today.getDate() - 7 + i)
 
-    max: 200,
-
-    limit: 180,
-
-    highlight: 'Feb'
-  },
-
-  '6m': {
-    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-
-    data: [120,135,150,170,180,190],
-
-    max: 220,
-
-    limit: 200,
-
-    highlight: 'Apr'
-  },
-
-  '1y': {
-    labels: [
-      'Jan','Feb','Mar','Apr','May','Jun',
-      'Jul','Aug','Sep','Oct','Nov','Dec'
-    ],
-
-    data: [120,130,145,155,170,180,190,175,185,195,205,215],
-
-    max: 230,
-
-    limit: 210,
-
-    highlight: 'Jul'
-  }
-
-} as const
-
-const current = computed(() => chartConfig[selectedRange.value])
+    return {
+      value: date,
+      label: date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short"
+      }),
+      isToday: i === 7
+    }
+  })
+})
 
 const option = computed(() => ({
-  title: [
-    {
-      text: `Flight Hours Trend (${selectedRange.value})`,
-      left: '0%',
-      top: 5,
-      textStyle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#1E293B'
-      }
-    },
-
-    {
-      text: 'Hours',
-      left: '0%',
-      top: 60,
-      textStyle: {
-        fontSize: 14,
-        color: '#64748B'
-      }
-    },
-
-    {
-      text: `Limit ${current.value.limit}:00h`,
-      right: '0%',
-      top: 60,
-      textStyle: {
-        color: '#EF4444',
-        fontSize: 18,
-        fontWeight: 'bold'
-      }
-    }
-  ],
-
   grid: {
-    top: 100,
+    top: 70,
     left: 50,
     right: 20,
-    bottom: 90
+    bottom: 70
   },
 
   tooltip: {
-    trigger: 'axis'
+    trigger: "axis"
   },
 
   xAxis: {
-    type: 'category',
+  type: "category",
 
-    data: current.value.labels,
+  data: xAxisData.value.map(item => item.label),
 
-    axisTick: {
-      show: false
-    },
+  axisLabel: {
+    hideOverlap: true,
 
-    axisLine: {
-      lineStyle: {
-        color: '#CBD5E1'
-      }
-    },
+    formatter(value: string) {
 
-    axisLabel: {
-      interval: 0,
+  const d = new Date(value)
 
-      formatter(value: string) {
+  const day = d.getDate()
 
-        if (value === current.value.highlight) {
+  const month = d.toLocaleDateString("en", {
+    month: "short"
+  })
 
-          return `{red|${value}}\n{today|Today}`
+  const isToday =
+    d.toDateString() === new Date(store.today).toDateString()
 
-        }
+  if (isToday) {
+    return `{today|${day}}\n{today|${month}}\n{small|Today}`
+  }
 
-        return value
+  return `${day}\n${month}`
+},
+
+    rich: {
+
+      today: {
+        color: "#E63757",
+        fontWeight: "bold",
+        fontSize: 16
       },
 
-      rich: {
-
-        red: {
-          color: '#EF4444',
-          fontWeight: 'bold',
-          fontSize: 16
-        },
-
-        today: {
-          color: '#64748B',
-          fontSize: 13
-        }
-
+      small: {
+        color: "#64748B",
+        fontSize: 12
       }
+
     }
-  },
+  }
+},
 
   yAxis: {
+    type: "value",
 
-    type: 'value',
-
-    max: current.value.max,
-
-    splitLine: {
-      show: false
-    }
-
+    max: currentConfig.value.max
   },
 
   series: [
-
     {
-
-      type: 'line',
+      type: "line",
 
       smooth: true,
 
-      symbol: 'circle',
+      data: chartData.value,
 
-      symbolSize: 12,
+      symbol: "circle",
 
-      data: current.value.data.map((value, index) => {
-
-        if (current.value.labels[index] === current.value.highlight) {
-
-          return {
-
-            value,
-
-            itemStyle: {
-
-              color: '#EF4444'
-
-            }
-
-          }
-
-        }
-
-        return value
-
-      }),
+      symbolSize: 10,
 
       lineStyle: {
-
-        width: 3,
-
-        color: '#2196F3'
-
+        color: "#22C5E8",
+        width: 4
       },
 
       itemStyle: {
-
-        color: '#2196F3'
-
+        color: "#22C5E8"
       },
 
       markLine: {
+  symbol: "none",
 
-        silent: true,
+  lineStyle: {
+    color: "#2563EB"
+  },
 
-        symbol: 'none',
-
-        label: {
-
-          show: false
-
-        },
-
-        lineStyle: {
-
-          color: '#EF4444',
-
-          type: 'dashed',
-
-          width: 2
-
-        },
-
-        data: [
-
-          {
-
-            yAxis: current.value.limit
-
-          }
-
-        ]
-
-      }
-
+  data: [
+    {
+      xAxis: 7
+    },
+    {
+      yAxis: currentConfig.value.limit
     }
-
   ]
-
+}
+    }
+  ]
 }))
 </script>
-
 <template>
-  <UCard class="rounded-3xl">
+  <UCard>
+
+    <div class="mb-6 flex items-center justify-between">
+
+      <div>
+
+        <h2 class="text-xl font-bold">
+          Flight Hours Trend
+        </h2>
+
+        <p class="text-sm text-gray-500">
+          Rolling sum of flight hours
+        </p>
+
+      </div>
+
+      <div class="flex rounded-xl border overflow-hidden">
+
+        <button
+          v-for="item in ranges"
+          :key="item"
+          @click="store.changeRange(item)"
+          class="px-5 py-2 text-sm font-semibold transition"
+          :class="[
+            store.selectedRange === item
+              ? 'bg-[#071C44] text-white'
+              : 'bg-white hover:bg-gray-100'
+          ]"
+        >
+          {{ item }}
+        </button>
+
+      </div>
+
+    </div>
 
     <VChart
       :option="option"
       autoresize
       style="height:420px"
     />
-
-    <div class="mt-4 grid grid-cols-5 overflow-hidden rounded-xl border">
-
-      <button
-        v-for="item in ranges"
-        :key="item"
-        @click="selectedRange = item"
-        class="py-4 text-lg font-semibold transition"
-        :class="
-          selectedRange === item
-            ? 'bg-[#071C44] text-white'
-            : 'bg-white hover:bg-gray-100'
-        "
-      >
-        {{ item }}
-      </button>
-
-    </div>
 
   </UCard>
 </template>

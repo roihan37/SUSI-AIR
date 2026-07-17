@@ -18,14 +18,19 @@ const menus = [
     {
         label: 'More',
         icon: 'i-lucide-ellipsis',
-        to: '/more'
+        to: '/'
     }
 ]
 </script>
 
 <template>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white  shadow-2xl rounded-t-3xl md:hidden z-50">
+    <div class="fixed
+    bottom-0
+    left-0
+    right-0
+    h-24
+    z-50 bg-white  shadow-2xl rounded-t-3xl md:hidden">
 
         <div class="grid grid-cols-4">
 
